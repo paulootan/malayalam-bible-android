@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+    
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/headingLayout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:stretchColumns="0"
+	    android:background="#000000">
+	    <TableRow>
+	        <TextView
+		        android:id="@+id/heading"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center_vertical|center_horizontal"
+		        android:textSize="20dp"
+		        android:text=""
+		        android:textColor="#FFFFFF"
+		        android:paddingBottom="2dp"
+		        android:paddingTop="5dp"
+		        android:background="#000000" />
+	        <ImageView
+	    	    android:src="@drawable/ic_info"
+	    	    android:id="@+id/infoButton"
+	    	    android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		    />
+	    </TableRow>
+	</TableLayout>
+
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+     android:layout_height="fill_parent" 
+     android:layout_width="fill_parent"
+     android:background="#FFFFFF">
+    
+	    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/booksLayout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="#000000"
+	    android:stretchColumns="0">
+		</TableLayout>
+     
+	</ScrollView>
+</LinearLayout>
