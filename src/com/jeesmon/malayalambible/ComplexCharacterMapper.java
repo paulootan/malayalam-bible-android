@@ -3,6 +3,8 @@ package com.jeesmon.malayalambible;
 public class ComplexCharacterMapper {
 	private static int malayalamUnicodeStart = 3328;
 	private static int malayalamUnicodeEnd = 3455;
+	private static boolean fixRendering = true;
+	private static boolean fixLigatureOnly = false;
 
 	private static final String[][] mappings = new String[][] {
 		//ligature mappings to PUA glyphs
@@ -75,13 +77,82 @@ public class ComplexCharacterMapper {
 		{ "([\uf3c6-\uf3d0]*.)\u0d48", "\u0d46\u0d46$1" },
 		{ "(.)([\u0d46-\u0d47])([\uf3c3-\uf3c5])", "$2$1$3" },
 	};
+	
+	private static final String[][] ligatureMappings = new String[][] {
+		//ligature mappings to PUA glyphs
+		{ "\u0d4d\u0d30", "\uf301" }, 
+		{ "\u0d15\u0d4d\u0d15", "\uf306" },
+		{ "\u0d15\u0d4d\u0d24", "\uf30b" },
+		{ "\u0d15\u0d4d\u0d37", "\uf311" },
+		{ "\u0d17\u0d4d\u0d26", "\uf317" },
+		{ "\u0d17\u0d4d\u0d28", "\uf31c" },
+		{ "\u0d17\u0d4d\u0d2e", "\uf31f" },
+		{ "\u0d19\u0d4d\u0d15", "\uf323" },
+		{ "\u0d19\u0d4d\u0d19", "\uf327" },
+		{ "\u0d1a\u0d4d\u0d1a", "\uf329" },
+		{ "\u0d1c\u0d4d\u0d1c", "\uf331" },
+		{ "\u0d1e\u0d4d\u0d1a", "\uf339" },
+		{ "\u0d1e\u0d4d\u0d1e", "\uf342" },
+		{ "\u0d1f\u0d4d\u0d1f", "\uf344" },
+		{ "\u0d23\u0d4d\u0d1f", "\uf34c" },
+		{ "\u0d24\u0d4d\u0d24", "\uf357" },
+		{ "\u0d24\u0d4d\u0d25", "\uf35c" },
+		{ "\u0d24\u0d4d\u0d2d", "\uf360" },
+		{ "\u0d24\u0d4d\u0d2e", "\uf364" },
+		{ "\u0d24\u0d4d\u0d38", "\uf36b" },
+		{ "\u0d26\u0d4d\u0d26", "\uf36d" },
+		{ "\u0d26\u0d4d\u0d27", "\uf36d" },
+		{ "\u0d28\u0d4d\u0d24", "\uf377" },
+		{ "\u0d28\u0d4d\u0d26", "\uf37c" },
+		{ "\u0d28\u0d4d\u0d27", "\uf37F" },
+		{ "\u0d28\u0d4d\u0d28", "\uf382" },
+		{ "\u0d2e\u0d4d\u0d2a", "\uf387" },
+		{ "\u0d28\u0d4d\u0d2e", "\uf38a" },
+		{ "\u0d7b\u0d4d\u0d31", "\uf38e" },
+		{ "\u0d2a\u0d4d\u0d2a", "\uf390" },
+		{ "\u0d2c\u0d4d\u0d2c", "\uf397" },
+		{ "\u0d2e\u0d4d\u0d2e", "\uf39e" },
+		{ "യ്യ", "\uf3a1" },
+		{ "\u0d36\u0d4d\u0d1a", "\uf3ac" },
+		{ "\u0d39\u0d4d\u0d28", "\uf3ba" },
+		{ "\u0d39\u0d4d\u0d2e", "\uf3bd" },
+		{ "\u0d33\u0d4d\u0d33", "\uf3c0" },
+		{ "\u0d31\u0d4d\u0d31", "\uf3c1" },
+		{ "\u0d4d\u0d2f", "\uf3c3" },
+		{ "\u0d4d\u0d38", "\uf3d0" },
+		{ "\u0d4d\u0d25", "\uf3c5" },
+		{ "\u0d4d\u0d17", "\uf3c6" },
+		{ "\u0d4d\u0d24", "\uf3c7" },
+		{ "\u0d4d\u0d27", "\uf3c8" },
+		{ "\u0d4d\u0d28", "\uf3c9" },
+		{ "\u0d4d\u0d2a", "\uf3ca" },
+		{ "\u0d4d\u0d2e", "\uf3cb" },
+		{ "\u0d4d\u0d36", "\uf3cc" },
+		{ "\u0d4d\u0d32", "\uf3ce" },
+		{ "\u0d4d\u0d15", "\uf3cd" },
+		{ "\u0d4d\u0d1f", "\uf3cf" },
+		{ "വ്വ", "\uf3a8" },
+		{ "്വ", "\uf3c4" }
+	};
 
 	public static String fix(String text) {
+		if(!fixRendering) {
+			return text;
+		}
+		
 		for (int i = 0; i < text.length(); i++) {
 			if (text.charAt(i) >= malayalamUnicodeStart
 					&& text.charAt(i) <= malayalamUnicodeEnd) {
-				for (int j = 0; j < mappings.length; j++) {
-					text = text.replaceAll(mappings[j][0], mappings[j][1]);
+				
+				if(fixLigatureOnly) {
+					for (int j = 0; j < ligatureMappings.length; j++) {
+						text = text.replaceAll(ligatureMappings[j][0], ligatureMappings[j][1]);
+					}
+				}
+				else {
+					for (int j = 0; j < mappings.length; j++) {
+						text = text.replaceAll(mappings[j][0], mappings[j][1]);
+					}
 				}
 				break;
 			}

@@ -56,7 +56,7 @@ public class MalayalamBibleActivity extends Activity {
 		adapter.open();
 
 		Cursor cursor = adapter.fetchAllBooks();
-		startManagingCursor(cursor);
+		//startManagingCursor(cursor);
 
 		cursor.moveToFirst();
 		int c = 0;

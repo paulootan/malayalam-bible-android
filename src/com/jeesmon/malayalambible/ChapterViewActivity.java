@@ -93,7 +93,7 @@ public class ChapterViewActivity extends Activity {
 		adapter.open();
 		
 		Cursor cursor = adapter.fetchChapter(book.getId(), chapterId);
-		startManagingCursor(cursor);
+		//startManagingCursor(cursor);
 		
 		cursor.moveToFirst();
 		
