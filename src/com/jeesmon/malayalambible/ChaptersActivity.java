@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ public class ChaptersActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setContentView(R.layout.chapters);
 	    
 	    Resources res = getResources();
