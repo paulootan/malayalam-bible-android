@@ -16,7 +16,7 @@ public class DataBaseAdapter {
 
 	public DataBaseAdapter open() throws SQLException {
 		dbHelper = new DataBaseHelper(context);
-		database = dbHelper.getReadableDatabase();
+		database = dbHelper.getDatabase();
 		return this;
 	}
 
@@ -25,14 +25,14 @@ public class DataBaseAdapter {
 	}
 	
 	public Cursor fetchAllBooks() {
-		return database.query("books", new String[] { "book_id", "MalayalamShortName", "num_chptr"}, 
+		return database.query("books", new String[] { "book_id", "MalayalamShortName", "num_chptr", "EnglishShortName"}, 
 				null, null, null,
 				null, null);
 	}
 	
-	public Cursor fetchChapter(int bookId, int chapterId) {
-		return database.query("verses", new String[] { "verse_id", "verse_text"}, 
+	public Cursor fetchChapter(int bookId, int chapterId, String table) {
+		return database.query(table, new String[] { "verse_id", "verse_text"}, 
 				"book_id = ? AND chapter_id = ?", new String[]{bookId + "", chapterId + ""}, null,
-				null, "verse_id");
-	}
+				null, null);
+	}	
 }
