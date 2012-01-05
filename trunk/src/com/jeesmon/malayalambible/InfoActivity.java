@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ImageView;
+import android.widget.Button;
 
 public class InfoActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    setTheme(ThemeUtils.getThemeResource());
 	    setContentView(R.layout.info);
 	    
 	    final Activity activity = this;
-	    ImageView back = (ImageView) findViewById(R.id.backButton);
+	    Button back = (Button) findViewById(R.id.backButton);
 	    back.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				activity.finish();

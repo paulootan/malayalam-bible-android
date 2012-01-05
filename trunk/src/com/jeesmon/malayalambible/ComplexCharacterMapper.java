@@ -1,10 +1,12 @@
 package com.jeesmon.malayalambible;
 
 public class ComplexCharacterMapper {
+	private static final int DEFAULT_FIX = 0;
+	private static final int ALTERNATE_FIX = 1;
+	private static final int NO_FIX = 2;
+	
 	private static int malayalamUnicodeStart = 3328;
 	private static int malayalamUnicodeEnd = 3455;
-	private static boolean fixRendering = true;
-	private static boolean fixLigatureOnly = false;
 
 	private static final String[][] mappings = new String[][] {
 		//ligature mappings to PUA glyphs
@@ -176,8 +178,8 @@ public class ComplexCharacterMapper {
 		{ "([\uf3c6-\uf3d0])(.)\u0d48", "\uf3db$1$2" },
 	};
 
-	public static String fix(String text) {
-		if(!fixRendering) {
+	public static String fix(String text, int fixType) {
+		if(fixType == NO_FIX) {
 			return text;
 		}
 		
@@ -185,12 +187,12 @@ public class ComplexCharacterMapper {
 			if (text.charAt(i) >= malayalamUnicodeStart
 					&& text.charAt(i) <= malayalamUnicodeEnd) {
 				
-				if(fixLigatureOnly) {
+				if(fixType == ALTERNATE_FIX) {
 					for (int j = 0; j < ligatureMappings.length; j++) {
 						text = text.replaceAll(ligatureMappings[j][0], ligatureMappings[j][1]);
 					}
 				}
-				else {
+				else if(fixType == DEFAULT_FIX) {
 					for (int j = 0; j < mappings.length; j++) {
 						text = text.replaceAll(mappings[j][0], mappings[j][1]);
 					}

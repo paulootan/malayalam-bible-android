@@ -1,5 +1,6 @@
 package com.jeesmon.malayalambible;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,12 +11,15 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
+	private static String[] DB_DELETE = {"malayalam-bible.db"};
 	private static String DB_PATH = "/data/data/com.jeesmon.malayalambible/databases/";
 
-	private static String DB_NAME = "malayalam-bible.db";
+	private static String DB_NAME = "bible-1.1.db";
 
+	private String dbPath = null;
 	private SQLiteDatabase bibleDB;
 
 	private final Context myContext;
@@ -49,20 +53,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		if (dbExist) {
 			// do nothing - database already exist
 		} else {
-
-			// By calling this method and empty database will be created into
-			// the default system path
-			// of your application so we are gonna be able to overwrite that
-			// database with our database.
-			this.getReadableDatabase();
-			this.close();
-
 			try {
-
 				copyDataBase();
 
 			} catch (IOException e) {
-
 				throw new Error("Error copying database");
 
 			}
@@ -81,9 +75,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase checkDB = null;
 
 		try {
-			String myPath = DB_PATH + DB_NAME;
+			String myPath = getDbPath() + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY);
+					SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 
 		} catch (SQLiteException e) {
 
@@ -106,8 +100,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 * handled. This is done by transfering bytestream.
 	 * */
 	private void copyDataBase() throws IOException {
+		String path = getDbPath();
+		
+		File dir = new File(path);
+		if(!dir.exists()) {
+			dir.mkdirs();
+		}
+		
+		for(String df : DB_DELETE) {
+			try {
+				File f = new File(path + df);
+				if(f != null && f.exists()) {
+					f.delete();
+				}
+				
+				if(!DB_PATH.equals(path)) {
+					f = new File(DB_PATH + df);
+					if(f != null && f.exists()) {
+						f.delete();
+					}
+				}
+			}
+			catch(Exception e) {
+				
+			}
+		}
+		
 		OutputStream databaseOutputStream = new FileOutputStream(
-				DB_PATH + DB_NAME);
+				path + DB_NAME);
 		InputStream databaseInputStream;
 
 		byte[] buffer = new byte[1024];
@@ -129,7 +149,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			R.raw.aan,
 			R.raw.aao,
 			R.raw.aap,
-			R.raw.aaq
+			R.raw.aaq,
+			R.raw.aar,
+			R.raw.aas,
+			R.raw.aat,
+			R.raw.aau,
+			R.raw.aav,
+			R.raw.aaw,
+			R.raw.aax,
+			R.raw.aay,
+			R.raw.aaz,
+			R.raw.aba,
+			R.raw.abb
 		};
 		
 		for (int i : id) {
@@ -147,9 +178,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public void openDataBase() throws SQLException {
 
 		// Open the database
-		String myPath = DB_PATH + DB_NAME;
+		String myPath = getDbPath() + DB_NAME;
 		bibleDB = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READONLY);
+				SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 
 	}
 
@@ -173,10 +204,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	// Add your public helper methods to access and get content from the
-	// database.
-	// You could return cursors by doing "return myDataBase.query(....)" so it'd
-	// be easy
-	// to you to create adapters for your views.
-
+	private String getDbPath() {
+		if(dbPath == null) {
+			String state = Environment.getExternalStorageState();
+			if (Environment.MEDIA_MOUNTED.equals(state)) {
+				dbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/com.jeesmon.malayalambible/db/";
+			}
+			else {
+				dbPath = DB_PATH;
+			}
+		}
+		
+		return dbPath;
+	}
+	
+	public SQLiteDatabase getDatabase() {
+		if(this.bibleDB == null) {
+			openDataBase();
+		}
+		return this.bibleDB;
+	}
 }

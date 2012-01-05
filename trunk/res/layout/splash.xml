@@ -13,4 +13,15 @@
         android:layout_gravity="center_horizontal|center_vertical"
         android:paddingTop="50dp"
     />
+    
+    <TextView
+        android:id="@+id/pleaseWait"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical" 
+        android:text="initializing database ..."
+        android:textColor="#fff"
+        android:paddingTop="50dp"
+        android:gravity="center_horizontal"
+        />
 </LinearLayout>

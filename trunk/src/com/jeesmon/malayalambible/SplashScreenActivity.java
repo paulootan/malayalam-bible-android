@@ -12,6 +12,10 @@ public class SplashScreenActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		ThemeUtils.setTheme(Preference.getInstance(this).getTheme());
+		
+		setTheme(ThemeUtils.getThemeResource());
 		setContentView(R.layout.splash);
 		
 		final Context context = this;
@@ -30,11 +34,17 @@ public class SplashScreenActivity extends Activity {
 	            } catch(InterruptedException e) {
 	                // do nothing
 	            } finally {
+	            	//check DB and create one if necessary
+	            	new DataBaseHelper(context);
+	            	//load book names
+	            	Utils.setRenderingFix(Preference.getInstance(context).getRendering());
+	            	Utils.getBooks();
+	            	
 	                finish();
-	                startActivity(new Intent(context, MalayalamBibleActivity.class));
+	                startActivity(new Intent(context, ChapterViewActivity.class));
 	            }
 	        }
 	    };
 	    splashTread.start();
-	}	
+	}
 }
