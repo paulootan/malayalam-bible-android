@@ -5,6 +5,14 @@
     android:orientation="vertical"
     style="?pageBackground">
     
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    style="?pageBackground">
+    
     <LinearLayout android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:gravity="center_vertical|center_horizontal"
@@ -139,4 +147,32 @@
 			</com.jeesmon.malayalambible.ObservableScrollView>            
         </LinearLayout>	    
     </LinearLayout>
+    
+    <TextView 
+        android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="@string/showFullChapter"
+		android:id="@+id/backToChapter"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentLeft="true"
+		android:background="#cccccc"
+		android:textColor="#000000"
+		android:padding="3dp"
+		android:clickable="true"
+		android:onClick="onBackToChapterClickEvent"
+		android:visibility="gone"
+	/>
+    
+    </LinearLayout>
+    
+    <ImageView android:layout_height="wrap_content"
+			android:layout_width="wrap_content" 
+			android:src="@drawable/bubblerightgray48"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true" 
+			android:id="@+id/BubbleRightView"
+			android:onClick="onAppMenuClickEvent">
+    </ImageView>
+    
+    </RelativeLayout>
 </LinearLayout>
