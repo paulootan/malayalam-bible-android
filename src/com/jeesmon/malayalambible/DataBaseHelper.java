@@ -14,10 +14,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-	private static String[] DB_DELETE = {"malayalam-bible.db"};
+	private static String[] DB_DELETE = {"malayalam-bible.db", "bible-1.1.db"};
 	private static String DB_PATH = "/data/data/com.jeesmon.malayalambible/databases/";
 
-	private static String DB_NAME = "bible-1.1.db";
+	private static String DB_NAME = "bible-1.2.db";
 
 	private String dbPath = null;
 	private SQLiteDatabase bibleDB;

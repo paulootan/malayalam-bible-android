@@ -13,6 +13,8 @@
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginRight="10dp"
 	        style="?textView"
+	        android:onClick="onVerseSelected"
+        	android:clickable="true"
 	    />
 	    <TextView android:id="@+id/verseSec"
 	        android:layout_width="fill_parent"
@@ -21,6 +23,8 @@
 	        android:layout_marginLeft="5dp"
 	        android:layout_marginRight="10dp"
 	        style="?textView2"
+	        android:onClick="onVerseSelected"
+        	android:clickable="true"
 	    />
     </LinearLayout>
 </TableRow>

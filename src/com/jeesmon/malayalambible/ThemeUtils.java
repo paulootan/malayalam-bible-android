@@ -2,6 +2,7 @@ package com.jeesmon.malayalambible;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 
 public class ThemeUtils
 {
@@ -80,5 +81,24 @@ public class ThemeUtils
 	
 	public static int getTheme() {
 		return theme;
+	}
+	
+	public static int getSelectionResource() {
+		int resource = 0;
+		switch (theme)
+		{
+		default:
+		case THEME_WHITE:
+		case THEME_LIGHT_GREEN:
+		case THEME_YELLOW:
+			resource = Color.YELLOW;
+			break;
+		case THEME_MAROON:
+		case THEME_BLACK:
+			resource = Color.GRAY;
+			break;
+		}
+		
+		return resource;
 	}
 }
