@@ -50,7 +50,8 @@ public class BaseActivity extends Activity {
 	}
 	
 	public void openBookmarksActivity(Context context) {
-		Intent i = new Intent(context, BookmarksListActivity.class);
+		boolean groupBy = Preference.getInstance(this).isBookmarksGroupByDate();
+		Intent i = new Intent(context, groupBy ? BookmarksExpandableListActivity.class : BookmarksListActivity.class);
     	startActivityForResult(i, OPEN_BOOKMARKS_ACTIVITY);
 	}
 	

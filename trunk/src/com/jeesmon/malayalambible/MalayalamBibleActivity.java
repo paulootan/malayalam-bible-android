@@ -45,8 +45,15 @@ public class MalayalamBibleActivity extends BaseActivity {
 	}
 
 	private void getContent() {
+		Preference pref = Preference.getInstance(this);
+		
 		setTheme(ThemeUtils.getThemeResource());
-		setContentView(R.layout.main);
+		if(pref.getLanguageLayout() == Preference.LAYOUT_SIDE_BY_SIDE) {
+			setContentView(R.layout.books_sidebyside);
+		}
+		else {
+			setContentView(R.layout.main);
+		}
 		
 		showContent();
 	}
@@ -80,7 +87,7 @@ public class MalayalamBibleActivity extends BaseActivity {
 			showSingleLanguage(renderingFix, fontSize, pref.getLanguage());
 		}
 		else {
-			showTwoLanguages(renderingFix, fontSize, pref.getLanguage(), pref.getSecLanguage());
+			showTwoLanguages(renderingFix, fontSize, pref.getLanguage(), pref.getSecLanguage(), pref.getLanguageLayout());
 		}		
 	}
 	
@@ -180,13 +187,18 @@ public class MalayalamBibleActivity extends BaseActivity {
 		}
 	}
 	
-	private void showTwoLanguages(int renderingFix, float fontSize, int language, int secLanguage) {
+	private void showTwoLanguages(int renderingFix, float fontSize, int language, int secLanguage, int layout) {
 		Resources res = getResources();
 		Typeface tf = Typeface.createFromAsset(getAssets(),
 				res.getString(R.string.font_name));
 		
-		int rowLayout = R.layout.bookrowboth;
-		int rowHeaderLayout = R.layout.tablerowsectionboth;
+		boolean showBoth = true;
+		if(language != Preference.LANG_MALAYALAM && secLanguage != Preference.LANG_MALAYALAM) {
+			showBoth = false;
+		}
+		
+		int rowLayout = showBoth ? R.layout.bookrowboth : R.layout.bookrow;
+		int rowHeaderLayout = showBoth ? R.layout.tablerowsectionboth : R.layout.tablerowsection;
 		
 		TextView tv = (TextView) findViewById(R.id.heading);
 		if(language == Preference.LANG_MALAYALAM) {
@@ -235,18 +247,24 @@ public class MalayalamBibleActivity extends BaseActivity {
 					t.setText(R.string.oldtestamenteng);
 				}
 				
-				t = (TextView) tr.findViewById(R.id.sectionSec);
-				t.setTextSize(fontSize);
-				if(secLanguage == Preference.LANG_MALAYALAM) {
-					t.setTypeface(tf);
-					t.setText(R.string.oldtestament);
-				}
-				else {
-					t.setText(R.string.oldtestamenteng);
+				if(showBoth) {
+					t = (TextView) tr.findViewById(R.id.sectionSec);
+					t.setTextSize(fontSize);
+					if(secLanguage == Preference.LANG_MALAYALAM) {
+						t.setTypeface(tf);
+						t.setText(R.string.oldtestament);
+					}
+					else {
+						t.setText(R.string.oldtestamenteng);
+					}
 				}
 				
 				tl.addView(tr);
 			} else if (c == 39) {
+				if(layout == Preference.LAYOUT_SIDE_BY_SIDE) {
+					tl = (TableLayout) findViewById(R.id.booksLayoutNT);
+				}
+				
 				tr = (TableRow)inflater.inflate(rowHeaderLayout, tl, false);
 				t = (TextView) tr.findViewById(R.id.section);
 				
@@ -259,14 +277,16 @@ public class MalayalamBibleActivity extends BaseActivity {
 					t.setText(R.string.newtestamenteng);
 				}
 				
-				t = (TextView) tr.findViewById(R.id.sectionSec);
-				t.setTextSize(fontSize);
-				if(secLanguage == Preference.LANG_MALAYALAM) {
-					t.setTypeface(tf);
-					t.setText(R.string.newtestament);
-				}
-				else {
-					t.setText(R.string.newtestamenteng);
+				if(showBoth) {
+					t = (TextView) tr.findViewById(R.id.sectionSec);
+					t.setTextSize(fontSize);
+					if(secLanguage == Preference.LANG_MALAYALAM) {
+						t.setTypeface(tf);
+						t.setText(R.string.newtestament);
+					}
+					else {
+						t.setText(R.string.newtestamenteng);
+					}
 				}
 				
 				tl.addView(tr);
@@ -304,14 +324,16 @@ public class MalayalamBibleActivity extends BaseActivity {
 				t.setText(book.getEnglishName());
 			}
 			
-			t = (TextView) tr.findViewById(R.id.bookSec);
-			t.setTextSize(fontSize);
-			if(secLanguage == Preference.LANG_MALAYALAM) {
-				t.setTypeface(tf);
-				t.setText(book.getName());
-			}
-			else {
-				t.setText(book.getEnglishName());
+			if(showBoth) {
+				t = (TextView) tr.findViewById(R.id.bookSec);
+				t.setTextSize(fontSize);
+				if(secLanguage == Preference.LANG_MALAYALAM) {
+					t.setTypeface(tf);
+					t.setText(book.getName());
+				}
+				else {
+					t.setText(book.getEnglishName());
+				}
 			}
 
 			tl.addView(tr);

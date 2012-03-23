@@ -98,7 +98,7 @@ public class BookmarksProviderWrapper {
 		
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
-				
+				int columnId = cursor.getColumnIndex(Browser.BookmarkColumns._ID);
 				int columnTitle = cursor.getColumnIndex(Browser.BookmarkColumns.TITLE);
 				int columnUrl = cursor.getColumnIndex(Browser.BookmarkColumns.URL);
 				
@@ -107,6 +107,7 @@ public class BookmarksProviderWrapper {
 						(count < limit)) {
 					
 					BookmarkItem item = new BookmarkItem(
+							cursor.getLong(columnId),
 							cursor.getString(columnTitle),
 							cursor.getString(columnUrl));
 					
@@ -132,7 +133,7 @@ public class BookmarksProviderWrapper {
 			if (c.moveToFirst()) {
 				String title = c.getString(c.getColumnIndex(Browser.BookmarkColumns.TITLE));
                 String url = c.getString(c.getColumnIndex(Browser.BookmarkColumns.URL));
-                result = new BookmarkItem(title, url);
+                result = new BookmarkItem(id, title, url);
 			}
 			
 			c.close();
@@ -188,13 +189,31 @@ public class BookmarksProviderWrapper {
 			Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
 			bookmarkExist = (cursor != null) && (cursor.moveToFirst());
 		} else {
-			String[] colums = new String[] { Browser.BookmarkColumns._ID };
+			String[] colums = new String[] { Browser.BookmarkColumns._ID, Browser.BookmarkColumns.CREATED };
 			String whereClause = Browser.BookmarkColumns.URL + " = \"" + url + "\"";
+			String orderClause = Browser.BookmarkColumns.CREATED + " DESC";
 
-			Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, null);
+			Cursor cursor = contentResolver.query(BOOKMARKS_URI, colums, whereClause, null, orderClause);
 			bookmarkExist = (cursor != null) && (cursor.moveToFirst());
 			if (bookmarkExist) {
-				id = cursor.getLong(cursor.getColumnIndex(Browser.BookmarkColumns._ID));
+				try {
+					long dateLong = cursor.getLong(cursor.getColumnIndex(Browser.BookmarkColumns.CREATED));
+					Date date = new Date(dateLong);
+					Calendar cal = Calendar.getInstance();
+					int m = cal.get(Calendar.MONTH);
+					int d = cal.get(Calendar.DAY_OF_MONTH);
+					int y = cal.get(Calendar.YEAR);
+					cal.setTime(date);
+					if(cal.get(Calendar.DAY_OF_MONTH) != d || cal.get(Calendar.MONTH) != m || cal.get(Calendar.YEAR) != y) {
+						bookmarkExist = false;
+					}
+					else {
+						id = cursor.getLong(cursor.getColumnIndex(Browser.BookmarkColumns._ID));
+					}
+				}
+				catch(Exception e) {
+					bookmarkExist = false;
+				}
 			}
 		}
 

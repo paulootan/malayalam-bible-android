@@ -71,6 +71,16 @@
            android:defaultValue="0"
            android:entries="@array/rendering_options"
            android:entryValues="@array/rendering_options_values" />
+        
+        <PreferenceScreen
+            android:title="Bookmarks"
+            android:summary="Bookmark options">
+           	<CheckBoxPreference
+           	    android:title="Group by date"
+           	    android:summary="Group bookmarks by date"
+           	    android:key="com.jeesmon.malayalambible.bookmark.group"
+           	    android:defaultValue="false" />
+        </PreferenceScreen>
 
     </PreferenceCategory>
 
