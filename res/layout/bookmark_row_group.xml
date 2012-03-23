@@ -26,7 +26,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal" android:layout_gravity="center_vertical"
-		android:paddingLeft="15dp">
+		android:paddingLeft="35dp">
 		<TextView
 			android:layout_gravity="center_vertical"
 			android:layout_height="wrap_content"
@@ -34,20 +34,6 @@
 			android:id="@+id/BookmarkRow.Title"
 			android:text="@+id/BookmarkRow.Title"
 			android:ellipsize="end"
-            android:singleLine="true"
-            android:layout_weight=".3" />
-		<TextView
-			android:layout_gravity="center_vertical"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:id="@+id/BookmarkRow.Created"
-			android:text="@+id/BookmarkRow.Created"
-			android:ellipsize="end"
-            android:singleLine="true"
-            android:layout_weight=".7"
-            android:gravity="right"
-            android:textStyle="italic"
-            android:textSize="9dp" />
+            android:singleLine="true" />
 	</LinearLayout>
-
 </LinearLayout>

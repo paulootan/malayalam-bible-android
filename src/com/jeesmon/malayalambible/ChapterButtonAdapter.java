@@ -42,6 +42,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
 		
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				book.setSelectedVerseIds(null);
 				activity.finish();
 				Intent chapterView = new Intent(mContext, ChapterViewActivity.class);
 				chapterView.putExtra("com.jeesmon.malayalambible.Book", book);

@@ -4,7 +4,7 @@ package com.jeesmon.malayalambible.model.items;
  * Represent a bookmark.
  */
 public class BookmarkItem {
-	
+	private long mId;
 	private String mTitle;
 	private String mUrl;
 	
@@ -13,9 +13,18 @@ public class BookmarkItem {
 	 * @param title The bookmark title.
 	 * @param url The bookmark url.
 	 */
-	public BookmarkItem(String title, String url) {
+	public BookmarkItem(long id, String title, String url) {
+		mId = id;
 		mTitle = title;
 		mUrl = url;
+	}
+	
+	/**
+	 * Get the id.
+	 * @return The id.
+	 */
+	public long getId() {
+		return mId;
 	}
 	
 	/**

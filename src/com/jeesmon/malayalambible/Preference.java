@@ -143,4 +143,8 @@ public class Preference {
 		editor.putInt("com.jeesmon.malayalambible.last.chapter", lastChapter);
 		editor.commit();
 	}
+	
+	public boolean isBookmarksGroupByDate() {
+		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.group", false);
+	}
 }
