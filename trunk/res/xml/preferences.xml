@@ -80,6 +80,11 @@
            	    android:summary="Group bookmarks by date"
            	    android:key="com.jeesmon.malayalambible.bookmark.group"
            	    android:defaultValue="false" />
+           	<CheckBoxPreference
+           	    android:title="Bookmark on long press"
+           	    android:summary="Bookmark verses on long press"
+           	    android:key="com.jeesmon.malayalambible.bookmark.longpress"
+           	    android:defaultValue="true" />
         </PreferenceScreen>
 
     </PreferenceCategory>

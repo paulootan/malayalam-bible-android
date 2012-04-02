@@ -10,6 +10,7 @@
         android:layout_marginRight="10dp"
         style="?textView"
         android:onClick="onVerseSelected"
+        android:longClickable="true"
         android:clickable="true"
     />
 </TableRow>

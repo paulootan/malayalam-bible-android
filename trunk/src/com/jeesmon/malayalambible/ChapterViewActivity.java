@@ -67,6 +67,9 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 	
 	private boolean isVerseView = false;
 	private GestureDetector mGestureDetector;
+	private VerseLongClickHandler mVerseLongClickHandler;
+	
+	private boolean bookmarkOnLongPress = false;
 	
 	public static void setPreferenceChanged(boolean preferenceChanged) {
 		ChapterViewActivity.preferenceChanged = preferenceChanged;
@@ -112,6 +115,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 	    preferenceChanged = false;
 	    
 	    mGestureDetector = new GestureDetector(this, new GestureListener());
+	    mVerseLongClickHandler = new VerseLongClickHandler();
 	    
 	    getContent(); 
 	}
@@ -143,6 +147,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 		final Preference pref = Preference.getInstance(this);
 		int renderingFix = pref.getRendering();
 		float fontSize = pref.getFontSize();
+		bookmarkOnLongPress = pref.isBookmarkOnLongPress();
 		
 		if(pref.getSecLanguage() == Preference.LANG_NONE) {
 			showSingleLanguage(renderingFix, fontSize, pref.getLanguage());
@@ -228,6 +233,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 			}
 			t.setText(verseId > 0 ? verseId + ". " + verse : verse, TextView.BufferType.SPANNABLE);
 			t.setTag("P" + verseId);
+			setVerseOnLongClickHandler(t);
 			
 			tl.addView(tr);
 			
@@ -336,6 +342,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 				}
 				t.setText(verseId > 0 ? verseId + ". " + verse : verse, TextView.BufferType.SPANNABLE);
 				t.setTag("P" + verseId);
+				setVerseOnLongClickHandler(t);
 				
 				cursorAtLast = !cursor.moveToNext();
 			}
@@ -348,6 +355,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 				}
 				t.setText(verseSecId > 0 ? verseSecId + ". " + verseSec : verseSec, TextView.BufferType.SPANNABLE);
 				t.setTag("S" + verseSecId);
+				setVerseOnLongClickHandler(t);
 				cursorSecAtLast = !cursorSec.moveToNext();
 			}
 						
@@ -480,6 +488,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 			}
 			t.setText(verseId > 0 ? verseId + ". " + verse : verse, TextView.BufferType.SPANNABLE);
 			t.setTag("P" + verseId);
+			setVerseOnLongClickHandler(t);
 			
 			tl.addView(tr);
 			tl1c++;
@@ -539,6 +548,7 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 			}
 			t.setText(verseId > 0 ? verseId + ". " + verse : verse, TextView.BufferType.SPANNABLE);
 			t.setTag("S" + verseId);
+			setVerseOnLongClickHandler(t);
 			
 			tl2.addView(tr);
 			tl2c++;
@@ -795,6 +805,10 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
     }
 	
 	private void addBookmarkVerses() {
+		if(selectedVerses.size() == 0) {
+			return;
+		}
+		
 		TreeSet<Integer> verseIds = new TreeSet<Integer>();
 		for(String sid : selectedVerses) {
 			try {
@@ -1118,5 +1132,29 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 		}
 		
 		return true;
+	}
+	
+	private void setVerseOnLongClickHandler(View v) {
+		if(bookmarkOnLongPress) {
+			v.setOnLongClickListener(mVerseLongClickHandler);
+		}
+	}
+	
+	private class VerseLongClickHandler implements View.OnLongClickListener {
+		@Override
+		public boolean onLongClick(View v) {			
+			try {
+				TextView tv = (TextView) v;
+				Spannable sText = (Spannable) tv.getText();
+				if(sText.getSpanStart(selectionSpan) == -1) {
+					sText.setSpan(selectionSpan, 0, sText.length(), 0);
+					selectedVerses.add((String) tv.getTag());
+				}
+			}
+			catch(Exception e){}
+			
+			addBookmarkVerses();
+			return true;
+		}		
 	}
 }

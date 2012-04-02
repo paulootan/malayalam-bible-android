@@ -147,4 +147,8 @@ public class Preference {
 	public boolean isBookmarksGroupByDate() {
 		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.group", false);
 	}
+	
+	public boolean isBookmarkOnLongPress() {
+		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.longpress", true);
+	}
 }
