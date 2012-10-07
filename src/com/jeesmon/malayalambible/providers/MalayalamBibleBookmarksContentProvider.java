@@ -23,10 +23,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.Browser;
+
+import com.jeesmon.malayalambible.sqlite.SDCardSQLiteOpenHelper;
 
 public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 	private static final Uri CONTENT_URI = Uri.parse("content://" + MalayalamBibleBookmarksContentProvider.AUTHORITY + "/" + MalayalamBibleBookmarksContentProvider.BOOKMARKS_TABLE);
@@ -36,8 +38,9 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.malayalambible.bookmarks";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.malayalambible.bookmarks";
 	
+	public static final String INTERNAL_DB_PATH = "/data/data/com.jeesmon.malayalambible/databases/";
 	private static final int DATABASE_VERSION = 1;
-	private static final String DATABASE_NAME = "bookmarks.db";
+	public static final String DATABASE_NAME = "bookmarks.db";
 	
 	public static final String BOOKMARKS_TABLE = "bookmarks";
 	
@@ -56,6 +59,7 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 	
 	private static final UriMatcher sUriMatcher;
 	
+	private static String mDbPath = null;
 	private SQLiteDatabase mDb;
 	private DatabaseHelper mDbHelper;
 	
@@ -70,7 +74,7 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		mContext = getContext();
-		mDbHelper = new DatabaseHelper(mContext);
+		mDbHelper = new DatabaseHelper(getDbPath());
 		mDb = mDbHelper.getWritableDatabase();
 		return true;
 	}
@@ -162,10 +166,23 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 		return count;
 	}
 	
-	private static class DatabaseHelper extends SQLiteOpenHelper {
-
-		public DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	public static String getDbPath() {
+		if(mDbPath == null) {
+			String state = Environment.getExternalStorageState();
+			if (Environment.MEDIA_MOUNTED.equals(state)) {
+				mDbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/com.jeesmon.malayalambible/db/";
+			}
+			else {
+				mDbPath = INTERNAL_DB_PATH;
+			}
+		}
+		
+		return mDbPath;
+	}
+	
+	private static class DatabaseHelper extends SDCardSQLiteOpenHelper {
+		public DatabaseHelper(String dbPath) {
+			super(dbPath, DATABASE_NAME, null, DATABASE_VERSION);
 		}
 
 		@Override
