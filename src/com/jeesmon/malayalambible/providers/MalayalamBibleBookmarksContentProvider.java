@@ -15,6 +15,8 @@
 
 package com.jeesmon.malayalambible.providers;
 
+import java.io.File;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -38,7 +40,7 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.malayalambible.bookmarks";
 	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.malayalambible.bookmarks";
 	
-	public static final String INTERNAL_DB_PATH = "/data/data/com.jeesmon.malayalambible/databases/";
+	public static final String INTERNAL_DB_PATH = "/data/data/com.jeesmon.malayalambible/databases";
 	private static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "bookmarks.db";
 	
@@ -170,10 +172,15 @@ public class MalayalamBibleBookmarksContentProvider extends ContentProvider {
 		if(mDbPath == null) {
 			String state = Environment.getExternalStorageState();
 			if (Environment.MEDIA_MOUNTED.equals(state)) {
-				mDbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/com.jeesmon.malayalambible/db/";
+				mDbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/com.jeesmon.malayalambible/db";
 			}
 			else {
 				mDbPath = INTERNAL_DB_PATH;
+			}
+			
+			File dir = new File(mDbPath);
+			if(!dir.exists()) {
+				dir.mkdirs();
 			}
 		}
 		
