@@ -2,8 +2,11 @@ package com.jeesmon.malayalambible;
 
 import java.util.ArrayList;
 
+import com.jeesmon.malayalambible.service.FontService;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,7 +20,8 @@ import android.widget.TextView;
 
 public class MalayalamBibleActivity extends BaseActivity {
 	private Context context = null;
-	
+	private AssetManager mgr=null;
+	static FontService Fontserviceinstance = FontService.getInstance();
 	private static boolean preferenceChanged = false;
 	
 	public static void setPreferenceChanged(boolean preferenceChanged) {
@@ -93,8 +97,10 @@ public class MalayalamBibleActivity extends BaseActivity {
 	
 	private void showSingleLanguage(int renderingFix, float fontSize, int language) {
 		Resources res = getResources();
-		Typeface tf = language == Preference.LANG_MALAYALAM ? Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name)) : null;
+		/*Typeface tf = language == Preference.LANG_MALAYALAM ? Typeface.createFromAsset(getAssets(),
+				res.getString(R.string.font_name)) : null;*/
+		mgr=getApplicationContext().getAssets();
+		Typeface tf = language == Preference.LANG_MALAYALAM ? Fontserviceinstance.getTypeface(mgr):null;
 		
 		int rowLayout = R.layout.bookrow;
 		int rowHeaderLayout = R.layout.tablerowsection;
@@ -189,9 +195,10 @@ public class MalayalamBibleActivity extends BaseActivity {
 	
 	private void showTwoLanguages(int renderingFix, float fontSize, int language, int secLanguage, int layout) {
 		Resources res = getResources();
-		Typeface tf = Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name));
-		
+		/*Typeface tf = Typeface.createFromAsset(getAssets(),
+				res.getString(R.string.font_name));*/
+		mgr=getApplicationContext().getAssets();
+		Typeface tf= Fontserviceinstance.getTypeface(mgr);
 		boolean showBoth = true;
 		if(language != Preference.LANG_MALAYALAM && secLanguage != Preference.LANG_MALAYALAM) {
 			showBoth = false;

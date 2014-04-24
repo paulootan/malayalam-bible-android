@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeesmon.malayalambible.providers.BookmarksProviderWrapper;
+import com.jeesmon.malayalambible.service.FontService;
 
 public class ChapterViewActivity extends BaseActivity implements IScrollListener {
 	public static final int MENU_ITEM_COPY = Menu.FIRST;
@@ -70,6 +72,9 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 	private VerseLongClickHandler mVerseLongClickHandler;
 	
 	private boolean bookmarkOnLongPress = false;
+	
+	private AssetManager mgr=null;
+	static FontService Fontserviceinstance = FontService.getInstance();
 	
 	public static void setPreferenceChanged(boolean preferenceChanged) {
 		ChapterViewActivity.preferenceChanged = preferenceChanged;
@@ -188,8 +193,10 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 		setupToolbar();
         		
 		Resources res = getResources();
-		Typeface tf = language == Preference.LANG_MALAYALAM ? Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name)) : null;
+		/*Typeface tf = language == Preference.LANG_MALAYALAM ? Typeface.createFromAsset(getAssets(),
+				res.getString(R.string.font_name)) : null;*/
+		mgr=getApplicationContext().getAssets();
+		Typeface tf = language == Preference.LANG_MALAYALAM ? Fontserviceinstance.getTypeface(mgr):null;
 		
 		TextView tv = (TextView) findViewById(R.id.heading);
 		if(tf == null) {
@@ -261,9 +268,10 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 		setupToolbar();
         		
 		Resources res = getResources();
-		Typeface tf = Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name));
-		
+		/*Typeface tf = Typeface.createFromAsset(getAssets(),
+				res.getString(R.string.font_name));*/
+		mgr=getApplicationContext().getAssets();
+		Typeface tf= Fontserviceinstance.getTypeface(mgr);
 		TextView tv = (TextView) findViewById(R.id.heading);
 		if(language == Preference.LANG_MALAYALAM) {
 			tv.setTypeface(tf);
@@ -386,7 +394,9 @@ public class ChapterViewActivity extends BaseActivity implements IScrollListener
 		setupToolbar();
         		
 		Resources res = getResources();
-		Typeface tf = Typeface.createFromAsset(getAssets(), res.getString(R.string.font_name));
+		/*Typeface tf = Typeface.createFromAsset(getAssets(), res.getString(R.string.font_name));*/
+		mgr=getApplicationContext().getAssets();
+		Typeface tf= Fontserviceinstance.getTypeface(mgr);
 		
 		TextView tv = (TextView) findViewById(R.id.heading);
 		if(language == Preference.LANG_MALAYALAM) {

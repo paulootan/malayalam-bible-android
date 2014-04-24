@@ -1,7 +1,11 @@
 package com.jeesmon.malayalambible;
 
+import com.jeesmon.malayalambible.service.FontService;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,6 +16,9 @@ import android.widget.TextView;
 
 public class ChaptersActivity extends BaseActivity {
 	private static boolean preferenceChanged = false;
+	private AssetManager mgr=null;
+	static FontService Fontserviceinstance = FontService.getInstance();
+	
 	
 	public static void setPreferenceChanged(boolean preferenceChanged) {
 		ChaptersActivity.preferenceChanged = preferenceChanged;
@@ -20,7 +27,7 @@ public class ChaptersActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	 
+	    
 	    preferenceChanged = false;
 	    
 	    getContent();
@@ -41,9 +48,11 @@ public class ChaptersActivity extends BaseActivity {
 		setContentView(R.layout.chapters);
 		
 	    Resources res = getResources();
-		Typeface tf = Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name));
-		
+		/*Typeface tf = Typeface.createFromAsset(getAssets(),
+				res.getString(R.string.font_name));*/
+	
+	    mgr=getApplicationContext().getAssets();
+		Typeface tf= Fontserviceinstance.getTypeface(mgr);
 		final Activity activity = this;
 	    Button back = (Button) findViewById(R.id.backButton);
 	    back.setOnClickListener(new View.OnClickListener() {

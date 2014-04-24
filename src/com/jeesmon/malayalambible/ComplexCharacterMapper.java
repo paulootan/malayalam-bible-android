@@ -1,14 +1,20 @@
 package com.jeesmon.malayalambible;
 
 public class ComplexCharacterMapper {
+	
+	
+
+
 	private static final int DEFAULT_FIX = 0;
 	private static final int ALTERNATE_FIX = 1;
 	private static final int NO_FIX = 2;
 	
 	private static int malayalamUnicodeStart = 3328;
 	private static int malayalamUnicodeEnd = 3455;
+	static int currentapiVersion =android.os.Build.VERSION.SDK_INT;
 
 	private static final String[][] mappings = new String[][] {
+	
 		//ligature mappings to PUA glyphs
 		{ "(.)്വൈ", "\uf3db$1\uf3c4" },
 		{ "(.)്വെ", "\uf3d9$1\uf3c4" },
@@ -87,6 +93,7 @@ public class ComplexCharacterMapper {
 		{ "([\uf3c6-\uf3d0]*.)\u0d4c", "\u0d46$1\u0d57" },
 		{ "([\uf3c6-\uf3d0]*.)\u0d48", "\u0d46\u0d46$1" },
 		{ "(.)([\u0d46-\u0d47])([\uf3c3-\uf3c5])", "$2$1$3" },
+		
 	};
 	
 	private static final String[][] ligatureMappings = new String[][] {
@@ -194,12 +201,18 @@ public class ComplexCharacterMapper {
 		{ "([\uf3c6-\uf3d0])(.)\u0d47", "\uf3da$1$2" },
 		{ "([\uf3c6-\uf3d0])(.)\u0d48", "\uf3db$1$2" },
 	};
+	
+   
+   
 
+	
 	public static String fix(String text, int fixType) {
 		if(fixType == NO_FIX) {
 			return text;
 		}
 		
+	/* mapping is done only if android version which is less than 16 */	
+	if(currentapiVersion<16){
 		for (int i = 0; i < text.length(); i++) {
 			if (text.charAt(i) >= malayalamUnicodeStart
 					&& text.charAt(i) <= malayalamUnicodeEnd) {
@@ -217,7 +230,9 @@ public class ComplexCharacterMapper {
 				break;
 			}
 		}
+	}
 
 		return text;
 	}
 }
+
