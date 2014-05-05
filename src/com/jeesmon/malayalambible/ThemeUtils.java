@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 
-public class ThemeUtils
-{
+public class ThemeUtils {
 	private static int theme;
 
 	public final static int THEME_WHITE = 0;
@@ -18,8 +17,7 @@ public class ThemeUtils
 	 * Set the theme of the Activity, and restart it by creating a new Activity
 	 * of the same type.
 	 */
-	public static void changeToTheme(Activity activity, int theme)
-	{
+	public static void changeToTheme(Activity activity, int theme) {
 		ThemeUtils.theme = theme;
 		activity.finish();
 
@@ -27,10 +25,8 @@ public class ThemeUtils
 	}
 
 	/** Set the theme of the activity, according to the configuration. */
-	public static void onActivityCreateSetTheme(Activity activity)
-	{
-		switch (theme)
-		{
+	public static void onActivityCreateSetTheme(Activity activity) {
+		switch (theme) {
 		default:
 		case THEME_WHITE:
 			activity.setTheme(R.style.Theme_White);
@@ -49,11 +45,10 @@ public class ThemeUtils
 			break;
 		}
 	}
-	
+
 	public static int getThemeResource() {
 		int resource = 0;
-		switch (theme)
-		{
+		switch (theme) {
 		default:
 		case THEME_WHITE:
 			resource = R.style.Theme_White;
@@ -71,22 +66,21 @@ public class ThemeUtils
 			resource = R.style.Theme_Yellow;
 			break;
 		}
-		
+
 		return resource;
 	}
 
 	public static void setTheme(int theme) {
 		ThemeUtils.theme = theme;
 	}
-	
+
 	public static int getTheme() {
 		return theme;
 	}
-	
+
 	public static int getSelectionResource() {
 		int resource = 0;
-		switch (theme)
-		{
+		switch (theme) {
 		default:
 		case THEME_WHITE:
 		case THEME_LIGHT_GREEN:
@@ -98,7 +92,7 @@ public class ThemeUtils
 			resource = Color.GRAY;
 			break;
 		}
-		
+
 		return resource;
 	}
 }

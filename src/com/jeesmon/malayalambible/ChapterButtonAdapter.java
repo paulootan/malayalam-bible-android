@@ -14,12 +14,12 @@ public class ChapterButtonAdapter extends BaseAdapter {
 	private Context mContext = null;
 	private Book book = null;
 	private Activity activity = null;
-	
+
 	public ChapterButtonAdapter(Context c, Book book, Activity activity) {
-        this.mContext = c;
-        this.book = book;
-        this.activity = activity;
-    }
+		this.mContext = c;
+		this.book = book;
+		this.activity = activity;
+	}
 
 	public int getCount() {
 		return book == null ? 0 : book.getChapters();
@@ -34,23 +34,26 @@ public class ChapterButtonAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		Button button = (Button) inflater.inflate(R.layout.button, parent, false);
+		LayoutInflater inflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		Button button = (Button) inflater.inflate(R.layout.button, parent,
+				false);
 		button.setId(position + 1);
 		button.setText((position + 1) + "");
 		button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-		
+
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				book.setSelectedVerseIds(null);
 				activity.finish();
-				Intent chapterView = new Intent(mContext, ChapterViewActivity.class);
+				Intent chapterView = new Intent(mContext,
+						ChapterViewActivity.class);
 				chapterView.putExtra("com.jeesmon.malayalambible.Book", book);
 				chapterView.putExtra("chapterId", v.getId());
 				mContext.startActivity(chapterView);
 			}
 		});
-		
+
 		return button;
 	}
 }

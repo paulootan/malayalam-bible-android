@@ -38,171 +38,195 @@ import com.jeesmon.malayalambible.model.items.BookmarkItem;
 
 public class BookmarksExpandableListAdapter extends BaseExpandableListAdapter {
 	private LayoutInflater mInflater = null;
-	
+
 	private int[] mItemMap;
 	private int mNumberOfBins;
 	private int mIdIndex;
-	
+
 	private Context mContext;
 	private Cursor mCursor;
 	private int mDateIndex;
-	
+
 	private ArrayList<String> groupKeys = new ArrayList<String>();
-	
-	private static final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-	
+
+	private static final SimpleDateFormat df = new SimpleDateFormat(
+			"dd-MMM-yyyy");
+
 	private float fontSize = 16f;
-	
+
 	private static String lastExpandedGroup = null;
 	private int lastExpandedGroupIndex = 0;
-	
+
 	/**
 	 * Constructor.
-	 * @param context The current context.
-	 * @param cursor The data cursor.
-	 * @param dateIndex The date index ?
+	 * 
+	 * @param context
+	 *            The current context.
+	 * @param cursor
+	 *            The data cursor.
+	 * @param dateIndex
+	 *            The date index ?
 	 */
-	public BookmarksExpandableListAdapter(Context context, Cursor cursor, int dateIndex) {
+	public BookmarksExpandableListAdapter(Context context, Cursor cursor,
+			int dateIndex) {
 		mContext = context;
 		mCursor = cursor;
 		mDateIndex = dateIndex;
-		
+
 		mIdIndex = cursor.getColumnIndexOrThrow(BaseColumns._ID);
-		
-		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
+		mInflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 		fontSize = Preference.getInstance(context).getFontSize();
-		
+
 		buildMap();
 	}
-	
+
 	/**
 	 * Split the data in the cursor into several "bins"
 	 */
 	private void buildMap() {
 		HashMap<String, Integer> itemCountMap = new HashMap<String, Integer>();
 		groupKeys.clear();
-		
+
 		if (mCursor.moveToFirst() && mCursor.getCount() > 0) {
-            while (!mCursor.isAfterLast()) {
-                long date = getLong(mDateIndex);
-                Date d = new Date(date);
-                String sd = df.format(d);
-                
-                Integer c = 0;
-                if(itemCountMap.containsKey(sd)) {
-                	c = itemCountMap.get(sd);
-                }
-                else {
-                	groupKeys.add(sd);
-                }
-                
-                itemCountMap.put(sd, ++c);
-                
-                mCursor.moveToNext();
-            }
-        }
-        
-        mNumberOfBins = groupKeys.size();
-        int[] array = new int[mNumberOfBins];
-        for(int i=0; i<mNumberOfBins; i++) {
-        	String k = groupKeys.get(i);
-        	array[i] = itemCountMap.get(k);
-        	if(k.equals(lastExpandedGroup)) {
-            	lastExpandedGroupIndex = i;
-            }
-        }
-        
-        mItemMap = array;
+			while (!mCursor.isAfterLast()) {
+				long date = getLong(mDateIndex);
+				Date d = new Date(date);
+				String sd = df.format(d);
+
+				Integer c = 0;
+				if (itemCountMap.containsKey(sd)) {
+					c = itemCountMap.get(sd);
+				} else {
+					groupKeys.add(sd);
+				}
+
+				itemCountMap.put(sd, ++c);
+
+				mCursor.moveToNext();
+			}
+		}
+
+		mNumberOfBins = groupKeys.size();
+		int[] array = new int[mNumberOfBins];
+		for (int i = 0; i < mNumberOfBins; i++) {
+			String k = groupKeys.get(i);
+			array[i] = itemCountMap.get(k);
+			if (k.equals(lastExpandedGroup)) {
+				lastExpandedGroupIndex = i;
+			}
+		}
+
+		mItemMap = array;
 	}
-	
+
 	/**
 	 * Get a long-typed data from mCursor.
-	 * @param cursorIndex The column index.
+	 * 
+	 * @param cursorIndex
+	 *            The column index.
 	 * @return The long data.
 	 */
 	private long getLong(int cursorIndex) {
-        return mCursor.getLong(cursorIndex);
-    }	
-	
-    private int groupPositionToBin(int groupPosition) {
-        return groupPosition;
-    }
-    
-    /**
-     * Move the cursor to the record corresponding to the given group position and child position. 
-     * @param groupPosition The group position.
-     * @param childPosition The child position.
-     * @return True if the move has succeeded.
-     */
-	private boolean moveCursorToChildPosition(int groupPosition, int childPosition) {
-        if (mCursor.isClosed()) {
-        	return false;
-        }
-        groupPosition = groupPositionToBin(groupPosition);
-        int index = childPosition;
-        for (int i = 0; i < groupPosition; i++) {
-            index += mItemMap[i];
-        }
-        return mCursor.moveToPosition(index);
-    }
-	
+		return mCursor.getLong(cursorIndex);
+	}
+
+	private int groupPositionToBin(int groupPosition) {
+		return groupPosition;
+	}
+
+	/**
+	 * Move the cursor to the record corresponding to the given group position
+	 * and child position.
+	 * 
+	 * @param groupPosition
+	 *            The group position.
+	 * @param childPosition
+	 *            The child position.
+	 * @return True if the move has succeeded.
+	 */
+	private boolean moveCursorToChildPosition(int groupPosition,
+			int childPosition) {
+		if (mCursor.isClosed()) {
+			return false;
+		}
+		groupPosition = groupPositionToBin(groupPosition);
+		int index = childPosition;
+		for (int i = 0; i < groupPosition; i++) {
+			index += mItemMap[i];
+		}
+		return mCursor.moveToPosition(index);
+	}
+
 	/**
 	 * Create a new view.
+	 * 
 	 * @return The created view.
 	 */
 	private TextView getGenericView() {
-        // Layout parameters for the ExpandableListView
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-                ViewGroup.LayoutParams.FILL_PARENT, (int) (45 * mContext.getResources().getDisplayMetrics().density));
+		// Layout parameters for the ExpandableListView
+		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT, (int) (45 * mContext
+						.getResources().getDisplayMetrics().density));
 
-        TextView textView = new TextView(mContext);
-        textView.setLayoutParams(lp);
-        // Center the text vertically
-        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
-        // Set the text starting position
-        textView.setPadding((int) (35 * mContext.getResources().getDisplayMetrics().density), 0, 0, 0);
-        textView.setTextSize(fontSize);
-        return textView;
-    }
-	
+		TextView textView = new TextView(mContext);
+		textView.setLayoutParams(lp);
+		// Center the text vertically
+		textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+		// Set the text starting position
+		textView.setPadding((int) (35 * mContext.getResources()
+				.getDisplayMetrics().density), 0, 0, 0);
+		textView.setTextSize(fontSize);
+		return textView;
+	}
+
 	/**
 	 * Create a new child view.
+	 * 
 	 * @return The created view.
 	 */
 	private View getCustomChildView() {
 		View view = mInflater.inflate(R.layout.bookmark_row_group, null, false);
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		moveCursorToChildPosition(groupPosition, childPosition);
 
-		return new BookmarkItem(mCursor.getLong(mCursor.getColumnIndex(Browser.BookmarkColumns._ID)), mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.TITLE)),
-				mCursor.getString(mCursor.getColumnIndex(Browser.BookmarkColumns.URL)));
+		return new BookmarkItem(mCursor.getLong(mCursor
+				.getColumnIndex(Browser.BookmarkColumns._ID)),
+				mCursor.getString(mCursor
+						.getColumnIndex(Browser.BookmarkColumns.TITLE)),
+				mCursor.getString(mCursor
+						.getColumnIndex(Browser.BookmarkColumns.URL)));
 	}
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
 		if (moveCursorToChildPosition(groupPosition, childPosition)) {
-            return getLong(mIdIndex);
-        }
-        return 0;
+			return getLong(mIdIndex);
+		}
+		return 0;
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
 		View view = getCustomChildView();
-        
-		TextView titleView = (TextView) view.findViewById(R.id.BookmarkRow_Title);
+
+		TextView titleView = (TextView) view
+				.findViewById(R.id.BookmarkRow_Title);
 		titleView.setTextSize(fontSize);
-		
-		BookmarkItem item = (BookmarkItem) getChild(groupPosition, childPosition);
+
+		BookmarkItem item = (BookmarkItem) getChild(groupPosition,
+				childPosition);
 		titleView.setText(item.getTitle());
-		
-        return view;
+
+		return view;
 	}
 
 	@Override
@@ -213,8 +237,9 @@ public class BookmarksExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public Object getGroup(int groupPosition) {
 		int binIndex = groupPositionToBin(groupPosition);
-		
-		return String.format("%s    (%d)",  groupKeys.get(binIndex), mItemMap[binIndex]);
+
+		return String.format("%s    (%d)", groupKeys.get(binIndex),
+				mItemMap[binIndex]);
 	}
 
 	@Override
@@ -228,10 +253,11 @@ public class BookmarksExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
 		TextView textView = getGenericView();
-        textView.setText(getGroup(groupPosition).toString());
-        return textView;
+		textView.setText(getGroup(groupPosition).toString());
+		return textView;
 	}
 
 	@Override
@@ -252,7 +278,7 @@ public class BookmarksExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public void onGroupCollapsed(int groupPosition) {
-		if(groupKeys.get(groupPosition).equals(lastExpandedGroup)) {
+		if (groupKeys.get(groupPosition).equals(lastExpandedGroup)) {
 			lastExpandedGroup = null;
 		}
 		super.onGroupCollapsed(groupPosition);
@@ -260,5 +286,5 @@ public class BookmarksExpandableListAdapter extends BaseExpandableListAdapter {
 
 	public int getLastExpandedGroupIndex() {
 		return lastExpandedGroupIndex;
-	}	
+	}
 }

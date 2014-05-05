@@ -25,28 +25,29 @@ public class DataBaseAdapter {
 	public void close() {
 		dbHelper.close();
 	}
-	
+
 	public Cursor fetchAllBooks() {
-		return database.query("books", new String[] { "book_id", "MalayalamShortName", "num_chptr", "EnglishShortName"}, 
-				null, null, null,
-				null, null);
+		return database.query("books", new String[] { "book_id",
+				"MalayalamShortName", "num_chptr", "EnglishShortName" }, null,
+				null, null, null, null);
 	}
-	
+
 	public Cursor fetchChapter(int bookId, int chapterId, String table) {
-		return database.query(table, new String[] { "verse_id", "verse_text"}, 
-				"book_id = ? AND chapter_id = ?", new String[]{bookId + "", chapterId + ""}, null,
-				null, null);
+		return database.query(table, new String[] { "verse_id", "verse_text" },
+				"book_id = ? AND chapter_id = ?", new String[] { bookId + "",
+						chapterId + "" }, null, null, null);
 	}
-	
-	public Cursor fetchVerses(int bookId, int chapterId, String table, ArrayList<String> verses, char lang) {
+
+	public Cursor fetchVerses(int bookId, int chapterId, String table,
+			ArrayList<String> verses, char lang) {
 		StringBuilder q = new StringBuilder("SELECT verse_id, verse_text FROM ");
 		q.append(table).append(" WHERE ");
 		q.append("book_id = ? AND chapter_id = ? AND verse_id IN (");
-		if(verses != null) {
+		if (verses != null) {
 			int count = 0;
-			for(String v : verses) {
-				if(v.charAt(0) == lang) {
-					if(count++ > 0) {
+			for (String v : verses) {
+				if (v.charAt(0) == lang) {
+					if (count++ > 0) {
 						q.append(",");
 					}
 					q.append(v.substring(1));
@@ -54,25 +55,28 @@ public class DataBaseAdapter {
 			}
 		}
 		q.append(") order by verse_id");
-		
-		return database.rawQuery(q.toString(), new String[]{bookId + "", chapterId + ""});
+
+		return database.rawQuery(q.toString(), new String[] { bookId + "",
+				chapterId + "" });
 	}
-	
-	public Cursor fetchVerses(int bookId, int chapterId, String table, ArrayList<Integer> verses) {
+
+	public Cursor fetchVerses(int bookId, int chapterId, String table,
+			ArrayList<Integer> verses) {
 		StringBuilder q = new StringBuilder("SELECT verse_id, verse_text FROM ");
 		q.append(table).append(" WHERE ");
 		q.append("book_id = ? AND chapter_id = ? AND verse_id IN (");
-		if(verses != null) {
+		if (verses != null) {
 			int count = 0;
-			for(Integer v : verses) {
-				if(count++ > 0) {
+			for (Integer v : verses) {
+				if (count++ > 0) {
 					q.append(",");
 				}
 				q.append(v);
 			}
 		}
 		q.append(") order by verse_id");
-		
-		return database.rawQuery(q.toString(), new String[]{bookId + "", chapterId + ""});
+
+		return database.rawQuery(q.toString(), new String[] { bookId + "",
+				chapterId + "" });
 	}
 }

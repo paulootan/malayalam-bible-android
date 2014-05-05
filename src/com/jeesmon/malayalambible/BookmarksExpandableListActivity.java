@@ -58,7 +58,7 @@ public class BookmarksExpandableListActivity extends ExpandableListActivity {
 
 	@Override
 	protected void onDestroy() {
-		if(mCursor != null && !mCursor.isClosed()) {
+		if (mCursor != null && !mCursor.isClosed()) {
 			mCursor.close();
 		}
 		super.onDestroy();
@@ -80,50 +80,59 @@ public class BookmarksExpandableListActivity extends ExpandableListActivity {
 				.getBookmarks(getContentResolver(), 2);
 		startManagingCursor(mCursor);
 
-		mAdapter = new BookmarksExpandableListAdapter(this,
-				mCursor, mCursor.getColumnIndex(Browser.BookmarkColumns.CREATED));
+		mAdapter = new BookmarksExpandableListAdapter(this, mCursor,
+				mCursor.getColumnIndex(Browser.BookmarkColumns.CREATED));
 
 		setListAdapter(mAdapter);
 
 		if (getExpandableListAdapter().getGroupCount() > 0) {
-        	getExpandableListView().expandGroup(mAdapter.getLastExpandedGroupIndex());
-        }
+			getExpandableListView().expandGroup(
+					mAdapter.getLastExpandedGroupIndex());
+		}
 	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		
-		ExpandableListView.ExpandableListContextMenuInfo info =
-			(ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
 
-		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-		int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-		int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
-		
+		ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+
+		int type = ExpandableListView
+				.getPackedPositionType(info.packedPosition);
+		int group = ExpandableListView
+				.getPackedPositionGroup(info.packedPosition);
+		int child = ExpandableListView
+				.getPackedPositionChild(info.packedPosition);
+
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-			BookmarkItem item = (BookmarkItem) getExpandableListAdapter().getChild(group, child);
+			BookmarkItem item = (BookmarkItem) getExpandableListAdapter()
+					.getChild(group, child);
 			menu.setHeaderTitle(item.getTitle());
-			
+
 			menu.add(0, MENU_DELETE_BOOKMARK, 0,
 					R.string.BookmarksListActivity_MenuDeleteBookmark);
 		}
-		
+
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) menuItem.getMenuInfo();
-		
-		int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-		
+		ExpandableListContextMenuInfo info = (ExpandableListContextMenuInfo) menuItem
+				.getMenuInfo();
+
+		int type = ExpandableListView
+				.getPackedPositionType(info.packedPosition);
+
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-			int child =	ExpandableListView.getPackedPositionChild(info.packedPosition);
-			
-			BookmarkItem item = (BookmarkItem) getExpandableListAdapter().getChild(group, child);
-			
+			int group = ExpandableListView
+					.getPackedPositionGroup(info.packedPosition);
+			int child = ExpandableListView
+					.getPackedPositionChild(info.packedPosition);
+
+			BookmarkItem item = (BookmarkItem) getExpandableListAdapter()
+					.getChild(group, child);
+
 			switch (menuItem.getItemId()) {
 			case MENU_DELETE_BOOKMARK:
 				BookmarksProviderWrapper.deleteBookmark(getContentResolver(),
@@ -134,7 +143,7 @@ public class BookmarksExpandableListActivity extends ExpandableListActivity {
 				break;
 			}
 		}
-		
+
 		return super.onContextItemSelected(menuItem);
 	}
 
@@ -156,9 +165,11 @@ public class BookmarksExpandableListActivity extends ExpandableListActivity {
 	}
 
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v,	int groupPosition, int childPosition, long id) {
-		BookmarkItem item = (BookmarkItem) getExpandableListAdapter().getChild(groupPosition, childPosition);
-        
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		BookmarkItem item = (BookmarkItem) getExpandableListAdapter().getChild(
+				groupPosition, childPosition);
+
 		Intent result = new Intent();
 		if (item != null) {
 			result.putExtra(Constants.EXTRA_ID_BOOKMARK, item.getUrl());
@@ -174,7 +185,7 @@ public class BookmarksExpandableListActivity extends ExpandableListActivity {
 		}
 
 		finish();
-        
+
 		return super.onChildClick(parent, v, groupPosition, childPosition, id);
 	}
 }

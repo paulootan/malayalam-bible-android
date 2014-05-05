@@ -12,46 +12,47 @@ public class Preference {
 	public static final int LAYOUT_BOTH_VERSE = 0;
 	public static final int LAYOUT_BOTH_SPLIT = 1;
 	public static final int LAYOUT_SIDE_BY_SIDE = 2;
-	
+
 	public static final int RENDERING_DEFAULT_FIX = 0;
 	public static final int RENDERING_ALTERNATE_FIX = 1;
 	public static final int RENDERING_NO_FIX = 2;
-	
+
 	private static Preference instance;
 	private SharedPreferences pref;
-	
+
 	private int language;
 	private int secLanguage;
 	private float fontSize;
 	private int rendering;
 	private int theme;
 	private int languageLayout;
-	
+
 	private Preference(Context context) {
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
-	
+
 	public static Preference getInstance(Context context) {
-		if(instance == null) {
-			instance = new Preference(context);			
+		if (instance == null) {
+			instance = new Preference(context);
 		}
-		
+
 		return instance;
 	}
 
 	public int getLanguage() {
 		try {
-			this.language = Integer.parseInt(pref.getString("com.jeesmon.malayalambible.language.primary", "0"));
-		}
-		catch(Exception e){
+			this.language = Integer.parseInt(pref.getString(
+					"com.jeesmon.malayalambible.language.primary", "0"));
+		} catch (Exception e) {
 			this.language = 0;
 		}
 		return language;
 	}
 
 	public float getFontSize() {
-		String font = pref.getString("com.jeesmon.malayalambible.fontsizekey", "4");
-		switch(font.charAt(0)) {
+		String font = pref.getString("com.jeesmon.malayalambible.fontsizekey",
+				"4");
+		switch (font.charAt(0)) {
 		case '0':
 			this.fontSize = 8f;
 			break;
@@ -80,15 +81,15 @@ public class Preference {
 			this.fontSize = 24f;
 			break;
 		}
-		
+
 		return fontSize;
 	}
 
 	public int getRendering() {
 		try {
-			this.rendering = Integer.parseInt(pref.getString("com.jeesmon.malayalambible.rendering.option", "0"));
-		}
-		catch(Exception e){
+			this.rendering = Integer.parseInt(pref.getString(
+					"com.jeesmon.malayalambible.rendering.option", "0"));
+		} catch (Exception e) {
 			this.rendering = 0;
 		}
 		return rendering;
@@ -96,9 +97,9 @@ public class Preference {
 
 	public int getTheme() {
 		try {
-			this.theme = Integer.parseInt(pref.getString("com.jeesmon.malayalambible.theme", "0"));
-		}
-		catch(Exception e){
+			this.theme = Integer.parseInt(pref.getString(
+					"com.jeesmon.malayalambible.theme", "0"));
+		} catch (Exception e) {
 			this.theme = 0;
 		}
 		return theme;
@@ -106,9 +107,9 @@ public class Preference {
 
 	public int getSecLanguage() {
 		try {
-			this.secLanguage = Integer.parseInt(pref.getString("com.jeesmon.malayalambible.language.secondary", "-1"));
-		}
-		catch(Exception e){
+			this.secLanguage = Integer.parseInt(pref.getString(
+					"com.jeesmon.malayalambible.language.secondary", "-1"));
+		} catch (Exception e) {
 			this.secLanguage = 0;
 		}
 		return secLanguage;
@@ -116,9 +117,9 @@ public class Preference {
 
 	public int getLanguageLayout() {
 		try {
-			this.languageLayout = Integer.parseInt(pref.getString("com.jeesmon.malayalambible.language.layout", "0"));
-		}
-		catch(Exception e){
+			this.languageLayout = Integer.parseInt(pref.getString(
+					"com.jeesmon.malayalambible.language.layout", "0"));
+		} catch (Exception e) {
 			this.languageLayout = 0;
 		}
 		return languageLayout;
@@ -143,12 +144,14 @@ public class Preference {
 		editor.putInt("com.jeesmon.malayalambible.last.chapter", lastChapter);
 		editor.commit();
 	}
-	
+
 	public boolean isBookmarksGroupByDate() {
-		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.group", false);
+		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.group",
+				false);
 	}
-	
+
 	public boolean isBookmarkOnLongPress() {
-		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.longpress", true);
+		return pref.getBoolean("com.jeesmon.malayalambible.bookmark.longpress",
+				true);
 	}
 }
