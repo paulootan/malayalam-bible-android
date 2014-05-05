@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-	private static String[] DB_DELETE = {"malayalam-bible.db", "bible-1.1.db"};
+	private static String[] DB_DELETE = { "malayalam-bible.db", "bible-1.1.db" };
 	private static String DB_PATH = "/data/data/com.jeesmon.malayalambible/databases/";
 
 	private static String DB_NAME = "bible-1.2.db";
@@ -33,11 +33,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public DataBaseHelper(Context context) {
 		super(context, DB_NAME, null, 1);
 		this.myContext = context;
-		
+
 		try {
 			createDataBase();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -77,7 +76,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		try {
 			String myPath = getDbPath() + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+					SQLiteDatabase.OPEN_READONLY
+							| SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 
 		} catch (SQLiteException e) {
 
@@ -101,68 +101,42 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	 * */
 	private void copyDataBase() throws IOException {
 		String path = getDbPath();
-		
+
 		File dir = new File(path);
-		if(!dir.exists()) {
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		
-		for(String df : DB_DELETE) {
+
+		for (String df : DB_DELETE) {
 			try {
 				File f = new File(path + df);
-				if(f != null && f.exists()) {
+				if (f != null && f.exists()) {
 					f.delete();
 				}
-				
-				if(!DB_PATH.equals(path)) {
+
+				if (!DB_PATH.equals(path)) {
 					f = new File(DB_PATH + df);
-					if(f != null && f.exists()) {
+					if (f != null && f.exists()) {
 						f.delete();
 					}
 				}
-			}
-			catch(Exception e) {
-				
+			} catch (Exception e) {
+
 			}
 		}
-		
-		OutputStream databaseOutputStream = new FileOutputStream(
-				path + DB_NAME);
+
+		OutputStream databaseOutputStream = new FileOutputStream(path + DB_NAME);
 		InputStream databaseInputStream;
 
 		byte[] buffer = new byte[1024];
-		
-		int[] id = {
-			R.raw.aaa,
-			R.raw.aab,
-			R.raw.aac,
-			R.raw.aad,
-			R.raw.aae,
-			R.raw.aaf,
-			R.raw.aag,
-			R.raw.aah,
-			R.raw.aai,
-			R.raw.aaj,
-			R.raw.aak,
-			R.raw.aal,
-			R.raw.aam,
-			R.raw.aan,
-			R.raw.aao,
-			R.raw.aap,
-			R.raw.aaq,
-			R.raw.aar,
-			R.raw.aas,
-			R.raw.aat,
-			R.raw.aau,
-			R.raw.aav,
-			R.raw.aaw,
-			R.raw.aax,
-			R.raw.aay,
-			R.raw.aaz,
-			R.raw.aba,
-			R.raw.abb
-		};
-		
+
+		int[] id = { R.raw.aaa, R.raw.aab, R.raw.aac, R.raw.aad, R.raw.aae,
+				R.raw.aaf, R.raw.aag, R.raw.aah, R.raw.aai, R.raw.aaj,
+				R.raw.aak, R.raw.aal, R.raw.aam, R.raw.aan, R.raw.aao,
+				R.raw.aap, R.raw.aaq, R.raw.aar, R.raw.aas, R.raw.aat,
+				R.raw.aau, R.raw.aav, R.raw.aaw, R.raw.aax, R.raw.aay,
+				R.raw.aaz, R.raw.aba, R.raw.abb };
+
 		for (int i : id) {
 			databaseInputStream = myContext.getResources().openRawResource(i);
 			while (databaseInputStream.read(buffer) > 0) {
@@ -170,7 +144,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			}
 			databaseInputStream.close();
 		}
-		
+
 		databaseOutputStream.flush();
 		databaseOutputStream.close();
 	}
@@ -180,7 +154,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = getDbPath() + DB_NAME;
 		bibleDB = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+				SQLiteDatabase.OPEN_READONLY
+						| SQLiteDatabase.NO_LOCALIZED_COLLATORS);
 
 	}
 
@@ -205,21 +180,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	}
 
 	private String getDbPath() {
-		if(dbPath == null) {
+		if (dbPath == null) {
 			String state = Environment.getExternalStorageState();
 			if (Environment.MEDIA_MOUNTED.equals(state)) {
-				dbPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/com.jeesmon.malayalambible/db/";
-			}
-			else {
+				dbPath = Environment.getExternalStorageDirectory()
+						.getAbsolutePath()
+						+ "/Android/data/com.jeesmon.malayalambible/db/";
+			} else {
 				dbPath = DB_PATH;
 			}
 		}
-		
+
 		return dbPath;
 	}
-	
+
 	public SQLiteDatabase getDatabase() {
-		if(this.bibleDB == null) {
+		if (this.bibleDB == null) {
 			openDataBase();
 		}
 		return this.bibleDB;

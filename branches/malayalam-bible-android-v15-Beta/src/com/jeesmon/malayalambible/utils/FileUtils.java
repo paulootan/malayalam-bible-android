@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class FileUtils {
 	private static final String TAG = FileUtils.class.getSimpleName();
-	
+
 	public static boolean copyTo(File from, File to) {
 		boolean status = false;
 		try {
@@ -25,12 +25,11 @@ public class FileUtils {
 			os.flush();
 			os.close();
 			status = true;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 			status = false;
 		}
-		
+
 		return status;
 	}
 }

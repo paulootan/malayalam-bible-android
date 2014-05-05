@@ -16,34 +16,36 @@ import com.jeesmon.malayalambible.Preference;
  * Cursor adapter for bookmarks.
  */
 public class BookmarksCursorAdapter extends SimpleCursorAdapter {
-	private static final SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+	private static final SimpleDateFormat df = new SimpleDateFormat(
+			"dd-MMM-yyyy");
 	private float fontSize = 16f;
 
 	public BookmarksCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to) {
 		super(context, layout, c, from, to);
-		
+
 		fontSize = Preference.getInstance(context).getFontSize();
-		
+
 		this.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			@Override
-			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-				if( columnIndex == 1 ){
+			public boolean setViewValue(View view, Cursor cursor,
+					int columnIndex) {
+				if (columnIndex == 1) {
 					TextView tv = (TextView) view;
 					tv.setTextSize(fontSize);
-				}
-				else if( columnIndex == 5 ){
+				} else if (columnIndex == 5) {
 					TextView tv = (TextView) view;
 					tv.setTextSize(fontSize - 4);
 					try {
-						long dateLong = cursor.getLong(cursor.getColumnIndex(Browser.BookmarkColumns.CREATED));
-						if(dateLong > 0) {
+						long dateLong = cursor.getLong(cursor
+								.getColumnIndex(Browser.BookmarkColumns.CREATED));
+						if (dateLong > 0) {
 							Date d = new Date(dateLong);
 							tv.setText(df.format(d));
 						}
+					} catch (Exception e) {
 					}
-					catch(Exception e){}
-		            return true;
+					return true;
 				}
 				return false;
 			}

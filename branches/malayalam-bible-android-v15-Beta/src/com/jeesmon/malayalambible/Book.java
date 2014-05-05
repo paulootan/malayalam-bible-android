@@ -5,16 +5,17 @@ import java.util.ArrayList;
 
 public class Book implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private int id;
-	private String name;	
+	private String name;
 	private int chapters;
 	private String englishName;
 	private String originalName;
 	private int selectedChapterId;
 	private ArrayList<Integer> selectedVerseIds;
-	
-	public Book(int id, String name, int chapters, String englishName, String originalName) {
+
+	public Book(int id, String name, int chapters, String englishName,
+			String originalName) {
 		this.id = id;
 		this.name = name;
 		this.chapters = chapters;

@@ -16,28 +16,27 @@ import android.widget.TextView;
 
 public class ChaptersActivity extends BaseActivity {
 	private static boolean preferenceChanged = false;
-	private AssetManager mgr=null;
+	private AssetManager mgr = null;
 	static FontService Fontserviceinstance = FontService.getInstance();
-	
-	
+
 	public static void setPreferenceChanged(boolean preferenceChanged) {
 		ChaptersActivity.preferenceChanged = preferenceChanged;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    
-	    preferenceChanged = false;
-	    
-	    getContent();
+		super.onCreate(savedInstanceState);
+
+		preferenceChanged = false;
+
+		getContent();
 	}
-	    
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		if(preferenceChanged) {
+
+		if (preferenceChanged) {
 			preferenceChanged = false;
 			getContent();
 		}
@@ -46,75 +45,77 @@ public class ChaptersActivity extends BaseActivity {
 	private void getContent() {
 		setTheme(ThemeUtils.getThemeResource());
 		setContentView(R.layout.chapters);
-		
-	    Resources res = getResources();
-		/*Typeface tf = Typeface.createFromAsset(getAssets(),
-				res.getString(R.string.font_name));*/
-	
-	    mgr=getApplicationContext().getAssets();
-		Typeface tf= Fontserviceinstance.getTypeface(mgr);
+
+		Resources res = getResources();
+		/*
+		 * Typeface tf = Typeface.createFromAsset(getAssets(),
+		 * res.getString(R.string.font_name));
+		 */
+
+		mgr = getApplicationContext().getAssets();
+		Typeface tf = Fontserviceinstance.getTypeface(mgr);
 		final Activity activity = this;
-	    Button back = (Button) findViewById(R.id.backButton);
-	    back.setOnClickListener(new View.OnClickListener() {
+		Button back = (Button) findViewById(R.id.backButton);
+		back.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				activity.finish();
-				startActivity(new Intent(ChaptersActivity.this, MalayalamBibleActivity.class));
+				startActivity(new Intent(ChaptersActivity.this,
+						MalayalamBibleActivity.class));
 			}
 		});
-	    
-	    final Preference pref = Preference.getInstance(this);
+
+		final Preference pref = Preference.getInstance(this);
 		int renderingFix = pref.getRendering();
-	    
+
 		TextView tv = (TextView) findViewById(R.id.chapters);
-		if(pref.getLanguage() == Preference.LANG_MALAYALAM) {
+		if (pref.getLanguage() == Preference.LANG_MALAYALAM) {
 			tv.setTypeface(tf);
-			tv.setText(ComplexCharacterMapper.fix(res.getString(R.string.chapters), renderingFix));
-		}
-		else {
+			tv.setText(ComplexCharacterMapper.fix(
+					res.getString(R.string.chapters), renderingFix));
+		} else {
 			tv.setText(res.getString(R.string.chapterseng));
 		}
 		tv.setTextSize(pref.getFontSize());
-		
-		if(pref.getSecLanguage() != Preference.LANG_NONE) {
+
+		if (pref.getSecLanguage() != Preference.LANG_NONE) {
 			tv = (TextView) findViewById(R.id.chaptersSec);
-			//tv.setVisibility(View.VISIBLE);
-			if(pref.getSecLanguage() == Preference.LANG_MALAYALAM) {
+			// tv.setVisibility(View.VISIBLE);
+			if (pref.getSecLanguage() == Preference.LANG_MALAYALAM) {
 				tv.setTypeface(tf);
-				tv.setText(ComplexCharacterMapper.fix(res.getString(R.string.chapters), renderingFix));
-			}
-			else {
+				tv.setText(ComplexCharacterMapper.fix(
+						res.getString(R.string.chapters), renderingFix));
+			} else {
 				tv.setText(res.getString(R.string.chapterseng));
 			}
 			tv.setTextSize(pref.getFontSize());
 		}
 
-	    Bundle extras = getIntent().getExtras();
-	    if(extras != null) {
-	        Book book = (Book) extras.getSerializable("com.jeesmon.malayalambible.Book");
-	        
-	        tv = (TextView) findViewById(R.id.heading);
-	        if(pref.getLanguage() == Preference.LANG_MALAYALAM) {
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			Book book = (Book) extras
+					.getSerializable("com.jeesmon.malayalambible.Book");
+
+			tv = (TextView) findViewById(R.id.heading);
+			if (pref.getLanguage() == Preference.LANG_MALAYALAM) {
 				tv.setTypeface(tf);
 				tv.setText(book.getName());
-	        }
-	        else {
-	        	tv.setText(book.getEnglishName());
-	        }
-	        
-	        if(pref.getSecLanguage() != Preference.LANG_NONE) {
-	        	tv = (TextView) findViewById(R.id.headingSec);
-	        	//tv.setVisibility(View.VISIBLE);
-	        	if(pref.getSecLanguage() == Preference.LANG_MALAYALAM) {
+			} else {
+				tv.setText(book.getEnglishName());
+			}
+
+			if (pref.getSecLanguage() != Preference.LANG_NONE) {
+				tv = (TextView) findViewById(R.id.headingSec);
+				// tv.setVisibility(View.VISIBLE);
+				if (pref.getSecLanguage() == Preference.LANG_MALAYALAM) {
 					tv.setTypeface(tf);
 					tv.setText(book.getName());
-		        }
-		        else {
-		        	tv.setText(book.getEnglishName());
-		        }
-	        }
-	        
-	        GridView gridview = (GridView) findViewById(R.id.gridview);
-	        gridview.setAdapter(new ChapterButtonAdapter(this, book, this));
-	    }
+				} else {
+					tv.setText(book.getEnglishName());
+				}
+			}
+
+			GridView gridview = (GridView) findViewById(R.id.gridview);
+			gridview.setAdapter(new ChapterButtonAdapter(this, book, this));
+		}
 	}
 }

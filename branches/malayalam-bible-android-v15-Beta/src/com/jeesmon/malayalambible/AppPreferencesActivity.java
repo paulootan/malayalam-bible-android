@@ -40,13 +40,16 @@ public class AppPreferencesActivity extends PreferenceActivity implements OnShar
 			}
 		}
 		else if("com.jeesmon.malayalambible.rendering.option".equals(key)) {
-			try {
-				Utils.setRenderingFix(Integer.parseInt(sharedPreferences.getString(key, "0")));
+			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+			if(currentapiVersion<16){
+				try {
+					Utils.setRenderingFix(Integer.parseInt(sharedPreferences.getString(key, "0")));
+				}
+				catch(Exception e) {
+					Utils.setRenderingFix(0);
+				}
+				Utils.getBooks(true);
 			}
-			catch(Exception e) {
-				Utils.setRenderingFix(0);
-			}
-			Utils.getBooks(true);
 		}
     }
 }
